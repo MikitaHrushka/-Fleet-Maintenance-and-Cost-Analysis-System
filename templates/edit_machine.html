@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Редактировать машину</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            max-width: 500px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .flash-message {
+            color: green;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Редактировать машину: {{ machine.number }}</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash-message">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <label>{{ form.number.label }} {{ form.number(size=32) }}</label>
+        <label>{{ form.brand.label }} {{ form.brand(size=32) }}</label>
+        <label>{{ form.model.label }} {{ form.model(size=32) }}</label>
+        <label>{{ form.year.label }} {{ form.year() }}</label>
+        <label>{{ form.mileage.label }} {{ form.mileage() }}</label>
+        <label>{{ form.notes.label }} {{ form.notes(rows=4) }}</label>
+        {{ form.submit() }}
+    </form>
+
+    <p><a href="{{ url_for('machine_detail', machine_id=machine.id) }}">🔙 Назад к машине</a></p>
+
+</body>
+</html>

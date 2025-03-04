@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить машину</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            max-width: 500px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Добавить новую машину</h1>
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <label>{{ form.number.label }} {{ form.number(size=32) }}</label>
+        <label>{{ form.brand.label }} {{ form.brand(size=32) }}</label>
+        <label>{{ form.model.label }} {{ form.model(size=32) }}</label>
+        <label>{{ form.year.label }} {{ form.year(size=32) }}</label>
+        <label>{{ form.mileage.label }} {{ form.mileage(size=32) }}</label>
+        <label>{{ form.notes.label }} {{ form.notes(rows=3, cols=32) }}</label>
+        {{ form.submit() }}
+    </form>
+
+    <p><a href="{{ url_for('list_machines') }}">🔙 Назад к списку машин</a></p>
+
+</body>
+</html>

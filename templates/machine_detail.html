@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Информация о машине</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #e9e9e9;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Кнопка возврата к списку машин -->
+<a href="{{ url_for('list_machines') }}">
+    <button class="back-button">🔙 Вернуться к списку машин</button>
+</a>
+
+<style>
+    .back-button {
+        padding: 12px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        background-color: #007bff; /* Синий */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .back-button:hover {
+        background-color: #0056b3; /* Темнее при наведении */
+    }
+</style>
+
+
+    <h1>Информация о машине: {{ machine.number }}</h1>
+
+    <!-- Основная информация -->
+    <h2>Основная информация</h2>
+    <table>
+        <tr><th>Марка</th><td>{{ machine.brand }}</td></tr>
+        <tr><th>Модель</th><td>{{ machine.model }}</td></tr>
+        <tr><th>Год выпуска</th><td>{{ machine.year }}</td></tr>
+        <tr><th>Километраж</th><td>{{ machine.mileage }} км</td></tr>
+        <tr><th>Примечания</th><td>{{ machine.notes or "Нет примечаний" }}</td></tr>
+    </table>
+    <a href="{{ url_for('edit_machine', machine_id=machine.id) }}">
+        <button>✏️ Редактировать машину</button>
+    </a>
+    <!-- История рейсов -->
+<h2>История рейсов</h2>
+<table>
+    <tr>
+        <th>Дата</th>
+        <th>Маршрут</th>
+        <th>Километраж (км)</th>
+        <th>Топливо (л)</th>
+        <th>Действия</th> 
+    </tr>
+    {% for trip in trips %}
+    <tr>
+        <td>{{ trip.date }}</td>
+        <td>{{ trip.route }}</td>
+        <td>{{ trip.distance }}</td>
+        <td>{{ trip.fuel }}</td>
+        <td>
+            <a href="{{ url_for('edit_trip', trip_id=trip.id) }}">
+                <button>✏️ Редактировать</button>
+            </a>
+            <a href="{{ url_for('delete_trip', trip_id=trip.id) }}" onclick="return confirm('Вы уверены, что хотите удалить этот рейс?');">
+                <button style="background-color: rgb(203, 66, 35);">❌ Удалить</button>
+            </a>
+        </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5">Нет данных о рейсах.</td></tr>
+    {% endfor %}
+</table>
+
+<a href="{{ url_for('add_trip', machine_id=machine.id) }}">
+    <button>➕ Добавить рейс</button>
+</a>
+
+<!-- Кнопка экспорта рейсов в Excel -->
+<a href="{{ url_for('export_trips', machine_id=machine.id) }}">
+    <button style="background-color: #007bff; color: white;">📥 Экспортировать в Excel</button>
+</a>
+
+
+
+    <!-- Техническое обслуживание -->
+    <h2>Техническое обслуживание</h2>
+    <table>
+        <tr>
+            <th>Дата</th>
+            <th>Деталь</th>
+            <th>Стоимость (€)</th>
+            <th>Механик</th>
+            <th>Место ремонта</th>
+            <th>Действия</th> 
+        </tr>
+        {% for maintenance in maintenances %}
+        <tr>
+            <td>{{ maintenance.date }}</td>
+            <td>{{ maintenance.part }}</td>
+            <td>{{ maintenance.cost }}</td>
+            <td>{{ maintenance.mechanic }}</td>
+            <td>{{ maintenance.location }}</td>
+            <td>
+                <a href="{{ url_for('edit_maintenance', maintenance_id=maintenance.id) }}">
+                    <button>✏️ Редактировать</button>
+                </a>
+                <a href="{{ url_for('delete_maintenance', maintenance_id=maintenance.id) }}" onclick="return confirm('Вы уверены, что хотите удалить запись ТО?');">
+                    <button style="background-color: red;">❌ Удалить</button>
+                </a>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6">Нет данных о техническом обслуживании.</td></tr>
+        {% endfor %}
+    </table>
+
+    <a href="{{ url_for('add_maintenance', machine_id=machine.id) }}">
+        <button>➕ Добавить ТО</button>
+    </a>
+
+
+    <!-- Расходы -->
+    <h2>Расходы</h2>
+    <table>
+        <tr>
+            <th>Дата</th>
+            <th>Тип</th>
+            <th>Описание</th>
+            <th>Сумма (€)</th>
+            <th>Действия</th>
+        </tr>
+        {% for expense in expenses %}
+        <tr>
+            <td>{{ expense.date }}</td>
+            <td>{{ expense.type }}</td>
+            <td>{{ expense.description }}</td>
+            <td>{{ expense.amount }}</td>
+            <td>
+                <a href="{{ url_for('edit_expense', expense_id=expense.id) }}">
+                    <button>✏️ Редактировать</button>
+                </a>
+                <a href="{{ url_for('delete_expense', expense_id=expense.id) }}" onclick="return confirm('Вы уверены, что хотите удалить запись о расходе?');">
+                    <button style="background-color: red;">❌ Удалить</button>
+                </a>
+        </tr>
+        {% else %}
+        <tr><td colspan="5">Нет данных о расходах.</td></tr>
+        {% endfor %}
+    </table>
+    <a href="{{ url_for('add_expense', machine_id=machine.id) }}">
+        <button>➕ Добавить расход</button>
+
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить техническое обслуживание</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            max-width: 500px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Добавить техническое обслуживание</h1>
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <label>{{ form.date.label }} {{ form.date(size=32) }}</label>
+        <label>{{ form.part.label }} {{ form.part(size=32) }}</label>
+        <label>{{ form.cost.label }} {{ form.cost() }}</label>
+        <label>{{ form.mechanic.label }} {{ form.mechanic(size=32) }}</label>
+        <label>{{ form.location.label }} {{ form.location(size=32) }}</label>
+        {{ form.submit() }}
+    </form>
+
+    <p><a href="{{ url_for('machine_detail', machine_id=machine_id) }}">🔙 Назад к машине</a></p>
+
+</body>
+</html>

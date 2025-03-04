@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Список машин</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #e9e9e9;
+        }
+        button {
+            padding: 5px 10px;
+            margin: 5px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .delete-btn {
+            background-color: red;
+        }
+        .delete-btn:hover {
+            background-color: darkred;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Список машин</h1>
+
+    <table>
+        <tr>
+            <th>Номер</th>
+            <th>Марка</th>
+            <th>Модель</th>
+            <th>Год</th>
+            <th>Действия</th>
+        </tr>
+        {% for machine in machines %}
+        <tr>
+            <td>{{ machine.number }}</td>
+            <td>{{ machine.brand }}</td>
+            <td>{{ machine.model }}</td>
+            <td>{{ machine.year }}</td>
+            <td>
+                <a href="{{ url_for('machine_detail', machine_id=machine.id) }}">
+                    <button>🔍 Просмотр</button>
+                </a>
+                <a href="{{ url_for('edit_machine', machine_id=machine.id) }}">
+                    <button>✏️ Редактировать</button>
+                </a>
+                <a href="{{ url_for('delete_machine', machine_id=machine.id) }}" onclick="return confirm('Вы уверены, что хотите удалить машину?');">
+                    <button class="delete-btn">❌ Удалить</button>
+                </a>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5">Нет машин в системе.</td></tr>
+        {% endfor %}
+    </table>
+
+    <a href="{{ url_for('add_machine') }}">
+        <button>➕ Добавить машину</button>
+    </a>
+
+</body>
+</html>
